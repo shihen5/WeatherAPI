@@ -3,7 +3,10 @@ package weatherAPI;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -15,11 +18,8 @@ public class LocationController {
     @Autowired
     LocationRepository repository;
 
-    //Authentication
-    //username: user
-    //password: password
     @RequestMapping(method = RequestMethod.GET, value = "locations")
-    public @ResponseBody ResponseEntity<?> findAll() throws JsonProcessingException {
+    public @ResponseBody ResponseEntity<?> findAll(@RequestParam(required = false) Authentication authentication) throws JsonProcessingException {
         List<Location> locations = repository.findAll();
         List<LocationResourceSupport> resources = new ArrayList<>();
         for(Location location : locations){
